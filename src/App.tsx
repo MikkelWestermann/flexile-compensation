@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Slider } from "./components/ui/slider";
 import { Input } from "./components/ui/input";
 import { cn } from "./lib/utils";
@@ -19,33 +19,39 @@ type CompensationOptions = {
   defaultWeeksPerYear: number;
 };
 
+const defaultOptions: CompensationOptions = {
+  stockPrice: 11.4,
+  hourlyRate: 150,
+  minEquitySwap: 0,
+  maxEquitySwap: 80,
+  defaultEquitySwap: 0,
+  minHoursPerWeek: 10,
+  maxHoursPerWeek: 35,
+  defaultHoursPerWeek: 21,
+  minWeeksPerYear: 20,
+  maxWeeksPerYear: 44,
+  defaultWeeksPerYear: 43,
+};
+
 function App() {
-  const [options, setOptions] = useState({
-    stockPrice: 11.4,
-    hourlyRate: 150,
-    minEquitySwap: 0,
-    maxEquitySwap: 80,
-    defaultEquitySwap: 0,
-    minHoursPerWeek: 10,
-    maxHoursPerWeek: 35,
-    defaultHoursPerWeek: 21,
-    minWeeksPerYear: 20,
-    maxWeeksPerYear: 44,
-    defaultWeeksPerYear: 43,
-  } as CompensationOptions);
+  const [options, setOptions] = useState<CompensationOptions>(() => {
+    const savedOptions = localStorage.getItem("compensationOptions");
+    return savedOptions ? JSON.parse(savedOptions) : defaultOptions;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("compensationOptions", JSON.stringify(options));
+  }, [options]);
 
   return (
     <div className="flex w-full h-screen items-center justify-center">
       <div className="flex space-x-8 w-full max-w-6xl">
         <div className="border border-black rounded-2xl p-4 flex-1">
           <H3>Compensation Options</H3>
-
           <CompensationOptions options={options} setOptions={setOptions} />
         </div>
-
         <div className="border border-black rounded-2xl p-4 flex-1">
           <H3>Compensation Calculator</H3>
-
           <CompensationCalculator options={options} />
         </div>
       </div>
@@ -172,9 +178,32 @@ const CompensationCalculator = ({
 }: {
   options: CompensationOptions;
 }) => {
-  const [equitySwap, setEquitySwap] = useState(options.defaultEquitySwap);
-  const [hoursPerWeek, setHoursPerWeek] = useState(options.defaultHoursPerWeek);
-  const [weeksPerYear, setWeeksPerYear] = useState(options.defaultWeeksPerYear);
+  const [equitySwap, setEquitySwap] = useState(() => {
+    const savedEquitySwap = localStorage.getItem("equitySwap");
+    return savedEquitySwap
+      ? Number(savedEquitySwap)
+      : options.defaultEquitySwap;
+  });
+
+  const [hoursPerWeek, setHoursPerWeek] = useState(() => {
+    const savedHoursPerWeek = localStorage.getItem("hoursPerWeek");
+    return savedHoursPerWeek
+      ? Number(savedHoursPerWeek)
+      : options.defaultHoursPerWeek;
+  });
+
+  const [weeksPerYear, setWeeksPerYear] = useState(() => {
+    const savedWeeksPerYear = localStorage.getItem("weeksPerYear");
+    return savedWeeksPerYear
+      ? Number(savedWeeksPerYear)
+      : options.defaultWeeksPerYear;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("equitySwap", equitySwap.toString());
+    localStorage.setItem("hoursPerWeek", hoursPerWeek.toString());
+    localStorage.setItem("weeksPerYear", weeksPerYear.toString());
+  }, [equitySwap, hoursPerWeek, weeksPerYear]);
 
   const cashPreEquity = new Decimal(options.hourlyRate)
     .times(hoursPerWeek)
