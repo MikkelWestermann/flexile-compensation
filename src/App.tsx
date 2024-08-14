@@ -188,18 +188,28 @@ const CompensationCalculator = ({
 
   return (
     <div className="grid grid-cols-12 gap-4 flex-1">
-      <div className="col-span-12">
+      <div className="col-span-12 space-y-2">
         <Label>
           How much of your hourly rate would you like to swap for equity?
         </Label>
 
         <div className="flex items-center space-x-4">
-          <Slider
-            value={[equitySwap]}
-            onValueChange={([value]) => setEquitySwap(value)}
-            min={options.minEquitySwap}
-            max={options.maxEquitySwap}
-          />
+          <div className="w-full space-y-2">
+            <Slider
+              value={[equitySwap]}
+              onValueChange={([value]) => setEquitySwap(value)}
+              min={options.minEquitySwap}
+              max={options.maxEquitySwap}
+            />
+            <div className="flex justify-between">
+              <div className="text-xs text-slate-500">
+                {options.minEquitySwap}%
+              </div>
+              <div className="text-xs text-slate-500">
+                {options.maxEquitySwap}%
+              </div>
+            </div>
+          </div>
 
           <Numeric
             value={equitySwap}
@@ -211,16 +221,26 @@ const CompensationCalculator = ({
         </div>
       </div>
 
-      <div className="col-span-12 flex flex-col">
+      <div className="col-span-12 flex flex-col space-y-2">
         <Label>How many hours per week will you work?</Label>
 
         <div className="flex items-center space-x-4">
-          <Slider
-            value={[hoursPerWeek]}
-            onValueChange={([value]) => setHoursPerWeek(value)}
-            min={options.minHoursPerWeek}
-            max={options.maxHoursPerWeek}
-          />
+          <div className="w-full space-y-2">
+            <Slider
+              value={[hoursPerWeek]}
+              onValueChange={([value]) => setHoursPerWeek(value)}
+              min={options.minHoursPerWeek}
+              max={options.maxHoursPerWeek}
+            />
+            <div className="flex justify-between">
+              <div className="text-xs text-slate-500">
+                {options.minHoursPerWeek} hours
+              </div>
+              <div className="text-xs text-slate-500">
+                {options.maxHoursPerWeek} hours
+              </div>
+            </div>
+          </div>
 
           <Numeric
             value={hoursPerWeek}
@@ -232,16 +252,26 @@ const CompensationCalculator = ({
         </div>
       </div>
 
-      <div className="col-span-12">
+      <div className="col-span-12 space-y-2">
         <Label>How many weeks a year will you work?</Label>
 
         <div className="flex items-center space-x-4">
-          <Slider
-            value={[weeksPerYear]}
-            onValueChange={([value]) => setWeeksPerYear(value)}
-            min={options.minWeeksPerYear}
-            max={options.maxWeeksPerYear}
-          />
+          <div className="w-full space-y-2">
+            <Slider
+              value={[weeksPerYear]}
+              onValueChange={([value]) => setWeeksPerYear(value)}
+              min={options.minWeeksPerYear}
+              max={options.maxWeeksPerYear}
+            />
+            <div className="flex justify-between">
+              <div className="text-xs text-slate-500">
+                {options.minWeeksPerYear} weeks
+              </div>
+              <div className="text-xs text-slate-500">
+                {options.maxWeeksPerYear} weeks
+              </div>
+            </div>
+          </div>
 
           <Numeric
             value={weeksPerYear}
@@ -313,7 +343,7 @@ const CalculatorResultEntry = ({
 };
 
 const H3 = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="text-xl font-bold">{children}</h3>
+  <h3 className="text-xl font-bold mb-4">{children}</h3>
 );
 
 const Label = ({ children }: { children: React.ReactNode }) => (
